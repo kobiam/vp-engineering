@@ -1,0 +1,46 @@
+{
+    "variables": {
+        "aws_access_key": "{{env `AWS_ACCESS_KEY_ID`}}",
+        "aws_secret_key": "{{env `AWS_SECRET_ACCESS_KEY`}}"
+    },
+    "builders": [
+        {
+            "access_key": "{{user `aws_access_key`}}",
+            "ami_name": "ubuntu_ami_baked_with_docker_compose",
+            "instance_type": "c5.xlarge",
+            "region": "us-east-1",
+            "secret_key": "{{user `key-name`}}",
+            "security_group_ids":"sg-id",
+            "associate_public_ip_address":"true",
+            "source_ami_filter": {
+                "filters": {
+                "virtualization-type": "hvm",
+                "name": "ubuntu/images/hvm-ssd/ubuntu-jammy-22.04-amd64-server-*",
+                "root-device-type": "ebs"
+                },
+                "owners": ["099720109477"],
+                "most_recent": true
+            },
+            "ssh_username": "ubuntu",
+            "type": "amazon-ebs"
+        }
+    ],
+    "provisioners": [
+        {
+            "type": "shell",
+            "inline":[
+                "sudo apt-get update -y",
+                "sudo apt install apt-transport-https ca-certificates curl software-properties-common -y",
+                "curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -",
+                "sudo add-apt-repository \"deb [arch=amd64] https://download.docker.com/linux/ubuntu focal stable\"",
+                "sudo apt update -y",
+                "sudo apt install docker-ce awscli -y",
+                "sudo gpasswd -a $USER docker",
+                "sudo systemctl enable docker",
+                "sudo curl -SL https://github.com/docker/compose/releases/download/v2.23.0/docker-compose-linux-x86_64 -o /usr/local/bin/docker-compose",
+                "sudo chmod +x /usr/local/bin/docker-compose",
+                "echo y | docker plugin install rexray/ebs"
+            ]
+        }
+    ]
+}
