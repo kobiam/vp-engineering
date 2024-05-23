@@ -23,9 +23,7 @@ public class App {
 
         // connecting producer
         Properties properties = new Properties();
-        // properties.put("bootstrap.servers", "kafka-svc.kafka-kraft.svc.cluster.local:9092");
-        // properties.put("bootstrap.servers", "127.0.0.1:9092");
-        properties.put("bootstrap.servers", "pubwebsrv2.avarnd.com:443");
+        properties.put("bootstrap.servers", "kafka-svc.kafka-kraft.svc.cluster.local:9092");
 
         // creating producer properties
         properties.put("key.serializer", StringSerializer.class.getName());
