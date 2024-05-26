@@ -15,7 +15,7 @@ func main() {
 	config.Producer.Return.Successes = true
 	config.Producer.Return.Errors = true
 
-	// Define Kafka broker addresses
+	// Define Kafka bootstrap servers
 	brokers := []string{"localhost:9092"}
 
 	// Create new sync producer
